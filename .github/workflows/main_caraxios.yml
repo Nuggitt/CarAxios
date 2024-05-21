@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - CarAxios
+name: Build and deploy ASP.Net Core app to Azure Web App - caraxios
 
 on:
   push:
@@ -16,25 +16,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
         with:
-          node-version: '20.x'
+          dotnet-version: '8.x'
+          include-prerelease: true
 
-      - name: npm install, build, and test
-        run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
-      
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: node-app
-          path: .
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build
     environment:
       name: 'Production'
@@ -46,20 +47,20 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: node-app
+          name: .net-app
       
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_23201D7E760D43D6A6D93FEAE474C066 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BCFFD42A1856432AACA3A865DE8DA862 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7AF8451B407E40FBBB8AF7661B6338EB }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B78608B11D204E319183A0625420C60D }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_94BA73184D014F93B22E6F705D419475 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F2E32D220A464A0095EFA3A2EFC72C1D }}
 
-      - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
+      - name: Deploy to Azure Web App
         id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
         with:
-          app-name: 'CarAxios'
+          app-name: 'caraxios'
           slot-name: 'Production'
           package: .
           
