@@ -3,48 +3,39 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- https://www.bootstrapcdn.com/ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <title>Car Menu</title>
+    <h1>Welcome To The Car Menu</h1>
+    <div id="app">
+        <h2> Get All Cars Test igen igen</h2>
+        <button id="getAllButton" v-on:click="getAllCars" class="btn btn-primary">Get All Cars</button>
+
+    </div>
 </head>
+<table class="table table-dark" v-if="cars.length > 0">
+    <thead>
+        <tr>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Horsepower</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="car in cars">
+            <td>{{car.Brand}}</td>
+            <td>{{car.Model}}</td>
+            <td>{{car.Horsepower}}</td>
+        </tr>
+    </tbody>
+</table>
+<div v-else>no pokemons</div>
 
 <body>
-    <h1>Welcome To The Car Menu tester 22</h1>
-    <div id="app">
-        <h2>Get All Cars</h2>
-        <button id="getAllButton" v-on:click="getAllCars" class="btn btn-primary">Get All Cars</button>
-        <h2>Add Car</h2>
-        <input v-model="addCarData.id" placeholder="pokemonId" type="number" />
-        <input v-model="addCarData.brand" placeholder="brand" type="text" />
-        <input v-model.number="addCarData.model" placeholder="type" type="text" />
-        <input v-model.number="addCarData.HorsePower" placeholder="HorsePower" type="number" />
-        <button v-on:click="addCar()" class="btn btn-success">Add</button>
-        <div>{{addMessage}}</div>
-        <table class="table table-striped" v-if="cars.length">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Brand</th>
-                    <th>Model</th>
-                    <th>Horsepower</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="car in cars" :key="car.Id">
-                    <td>{{car.id}}</td>
-                    <td>{{car.brand}}</td>
-                    <td>{{car.model}}</td>
-                    <td>{{car.horsePower}}</td>
-                </tr>
-            </tbody>
-        </table>
-        <div v-else>No cars available</div>
-    </div>
-    <script src="index.js"></script>
+
 </body>
+<script src="index.js"></script>
 
 </html>
